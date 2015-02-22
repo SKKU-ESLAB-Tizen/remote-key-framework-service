@@ -184,11 +184,11 @@ void rkf_received_data_cb(bt_socket_received_data_s *data, void *user_data) {
 	ALOGD("RemoteKeyFW: received a data!(%d) %s", ++gReceiveCount, buffer);
 
 	// ACTION!
-	if(strncmp(buffer, menu_string, strlen(home_string)) == 0) {
+	if(strncmp(buffer, menu_string, strlen(menu_string)) == 0) {
 		system("/bin/echo 1 > /sys/bus/platform/devices/homekey/coordinates");
 	} else if(strncmp(buffer, home_string, strlen(home_string)) == 0) {
 		system("/bin/echo 11 > /sys/bus/platform/devices/homekey/coordinates");
-	} else if(strncmp(buffer, back_string, strlen(home_string)) == 0) {
+	} else if(strncmp(buffer, back_string, strlen(back_string)) == 0) {
 		system("/bin/echo 111 > /sys/bus/platform/devices/homekey/coordinates");
 	}
 
