@@ -50,25 +50,6 @@ int rkf_initialize_bluetooth(const char *device_name) {
 	{
 		ALOGE("[%s] bluetooth is not enabled.", __FUNCTION__);
 		return -3;
-//		if(bt_adapter_set_state_changed_cb(rkf_state_changed_cb, NULL) != BT_ERROR_NONE)
-//		{
-//			ALOGE("[%s] bt_adapter_set_state_changed_cb() failed.", __FUNCTION__);
-//			return -3;
-//		}
-//
-//		if(bt_adapter_enable() == BT_ERROR_NONE)
-//		{
-//			int timeout_id = -1;
-//			ALOGE("[%s] bt_adapter_state_changed_cb will be called.", __FUNCTION__);
-//			timeout_id = g_timeout_add(60000, timeout_func_cb, gMainLoop);
-//			g_main_loop_run(gMainLoop);
-//			g_source_remove(timeout_id);
-//		}
-//		else
-//		{
-//			ALOGE("[%s] bt_adapter_enable() failed.", __FUNCTION__);
-//			return -4;
-//		}
 	}
 	else
 	{
