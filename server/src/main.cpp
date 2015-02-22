@@ -23,8 +23,6 @@ int rkf_initialize_bluetooth(void);
 int rkf_finalize_bluetooth_socket(void);
 int rkf_finalize_bluetooth(void);
 int rkf_listen_connection(void);
-int rkf_send_data(const char *, int);
-void rkf_main_loop(void);
 
 // Callbacks
 void rkf_received_data_cb(bt_socket_received_data_s *, void *);
@@ -191,20 +189,6 @@ int rkf_listen_connection(void) {
 	}
 }
 
-int rkf_send_data(const char *data, int length) {
-	int ret = bt_socket_send_data(gSocketFd, data, length);
-	if(ret != BT_ERROR_NONE) {
-		ALOGD("RemoteKeyFW: unknown error is occured in rkf_serror_end_data()");
-		return -1;
-	} else {
-		return 0;
-	}
-}
-
-void rkf_main_loop(void) {
-	g_main_loop_run(gMainLoop);
-}
-
 int gReceiveCount = 0;
 
 // bt_socket_data_received_cb
@@ -227,10 +211,6 @@ void rkf_received_data_cb(bt_socket_received_data_s *data, void *user_data) {
 		system("/bin/echo 111 > /sys/bus/platform/devices/homekey/coordinates");
 	}
 
-	// Sending ack is optional
-	//char ack_string[]="ack rkf ";
-	//ack_string[strlen(ack_string)-1] = '0' + (gReceiveCount % 10);
-	//rkf_send_data(ack_string, strlen(ack_string)+1);
 }
 
 // bt_socket_connection_state_changed_cb
@@ -243,14 +223,8 @@ void rkf_socket_connection_state_changed_cb(int result, bt_socket_connection_sta
 
 	if(connection_state_event == BT_SOCKET_CONNECTED) {
 		ALOGD("RemoteKeyFW: connected");
-//		if(connection != NULL) {
-//			ALOGD("RemoteKeyFW: connected (%d,%s)", connection->local_role, connection->remote_address);
-//		}
 	} else if(connection_state_event == BT_SOCKET_DISCONNECTED) {
 		ALOGD("RemoteKeyFW: disconnected");
-//		if(connection != NULL) {
-//			ALOGD("RemoteKeyFW: disconnected (%d,%s)", connection->local_role, connection->remote_address);
-//		}
 		g_main_loop_quit(gMainLoop);
 	}
 }
@@ -314,7 +288,7 @@ int main(int argc, char *argv[])
 	}
 
 	// If succeed to accept a connection, start a main loop.
-	rkf_main_loop();
+	g_main_loop_run(gMainLoop);
 
 	ALOGI("Server is terminated successfully\n");
 
